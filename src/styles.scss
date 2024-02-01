@@ -1,1 +1,19 @@
-/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+    @apply px-8 py-2 rounded-lg text-white cursor-pointer font-bold
+}
+
+.green {
+    @apply hover:bg-green-400 bg-green-600
+}
+
+.red {
+    @apply hover:bg-red-400 bg-red-600
+}
+
+.input {
+    @apply flex-1 outline-none bg-slate-100 mr-2
+}
