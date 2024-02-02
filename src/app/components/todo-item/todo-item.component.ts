@@ -2,6 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TodoModel } from '../../providers/todos.states';
 import { Store } from '@ngrx/store';
 import { actions } from './../../providers/todos.actions';
+import { DatepickerOptions } from 'ng2-datepicker';
+import { getYear } from 'date-fns';
+
 
 @Component({
   selector: 'app-todo-item',
@@ -12,49 +15,32 @@ export class TodoItemComponent implements OnInit {
   @Input() todo?: TodoModel;
   editTodo: boolean = false;
   completeTodo: boolean = false;
-  todoInput?: string;
+  todoInput: TodoModel = {
+    id: 0,
+    title: '',
+    description: '',
+    dueDate: '',
+    status: 'open',
+  };
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.completeTodo = this.todo!.completed;
-    this.todoInput = this.todo!.title;
+    this.todoInput = { ...this.todo! };
   }
-  updateToggle() {
+
+  updateToggle(): void {
     this.editTodo = !this.editTodo;
   }
-  updateTodo() {
-    this.editTodo = !this.editTodo;
-    if (this.todoInput!.trim().length > 0)
-    this.store.dispatch(
-      actions.updateToDoAction({
-        id: this.todo!.id,
-        completed: this.todo!.completed,
-        title: this.todoInput!.trim(),
-      })
-      );
-    else {
-      this.todoInput = this.todo!.title;
+
+  updateTodo(): void {
+    if (this.todoInput.title.trim().length > 0) {
+      this.store.dispatch(actions.updateToDoAction({ ...this.todoInput }));
+      this.editTodo = false;
     }
   }
-  completeToggle() {
-    this.completeTodo = !this.completeTodo;
-    this.store.dispatch(
-      actions.updateToDoAction({
-        id: this.todo!.id,
-        completed: this.completeTodo,
-        title: this.todo!.title,
-      })
-    );
-  }
-  deleteTodo() {
-    this.editTodo = !this.editTodo;
-    this.store.dispatch(
-      actions.deleteToDoAction({
-        id: this.todo!.id,
-        completed: this.todo!.completed,
-        title: this.todo!.title,
-      })
-    );
+
+  deleteTodo(): void {
+    this.store.dispatch(actions.deleteToDoAction(this.todo!));
   }
 }

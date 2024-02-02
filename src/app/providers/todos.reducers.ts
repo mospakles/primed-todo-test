@@ -9,24 +9,19 @@ import { TodoModel, todos } from './todos.states';
 
 export const todoReducer = createReducer(
   todos,
-  on(actions.addToDoAction, (state, todo) => {
-    return [todo, ...state];
-  }),
-  on(actions.updateToDoAction, (state, todo) => {
-      let tempTodoIndex = state.findIndex((t) => t.id === todo.id);
-      var tempStates = [...state];
-    if (tempTodoIndex !== -1) {
-      state[tempTodoIndex] = todo;
+  on(actions.addToDoAction, (state, todo) => [...state, todo]),
+  on(actions.updateToDoAction, (state, updatedTodo) => {
+    const index = state.findIndex((todo) => todo.id === updatedTodo.id);
+    if (index !== -1) {
+      const newState = [...state];
+      newState[index] = { ...newState[index], ...updatedTodo };
+      return newState;
     }
-    return [...state];
+    return state;
   }),
-  on(actions.deleteToDoAction, (state, todo) => {
-    let todos = state.filter((t) => t.id != todo.id);
-    return [...todos];
-  })
+  on(actions.deleteToDoAction, (state, { id }) =>
+    state.filter((todo) => todo.id !== id)
+  )
 );
 
-export const todoSelector = createSelector(
-  createFeatureSelector('todos'),
-  (todos: TodoModel[]) => todos
-);
+export const todoSelector = createFeatureSelector<TodoModel[]>('todos');

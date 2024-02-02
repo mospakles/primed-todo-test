@@ -1,6 +1,58 @@
-<div class="">
-    <div class="h-screen flex justify-center items-center font-semibold text-2xl" *ngIf="todos.length <=0 ">Add Todo!</div>
-    <div class="" *ngFor="let todo of todos;">
-        <app-todo-item [todo]="todo"></app-todo-item>
+<div class="container mx-auto p-4">
+    <div class="filter-container flex flex-col md:flex-row mb-4">
+        <div class="mb-2 md:mr-4 md:mb-0">
+            <label for="statusFilter" class="block text-gray-700 text-sm font-bold">Filter by Status:</label>
+            <select id="statusFilter" [(ngModel)]="selectedFilter" (change)="applyFilter()"
+                class="mt-1 p-2 border rounded w-full md:w-auto">
+                <option value="all">All</option>
+                <option value="open">Open</option>
+                <option value="pending">Pending</option>
+                <option value="in-progress">In Progress</option>
+                <option value="completed">Completed</option>
+            </select>
+        </div>
+        <div class="mb-2 md:mb-0">
+            <label for="sortFilter" class="block text-gray-700 text-sm font-bold">Sort by:</label>
+            <select id="sortFilter" [(ngModel)]="selectedSort" (change)="applySort()"
+                class="mt-1 p-2 border rounded w-full md:w-auto">
+                <option value="default">Default</option>
+                <option value="title">Title</option>
+                <option value="dueDate">Due Date</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+        <div cdkDropList [cdkDropListData]="getTasks('open')" (cdkDropListDropped)="onDrop($event)"
+            class="w-full md:w-1/4 bg-rose-50 p-4 rounded-xl hover:bg-opacity-80">
+            <h2 class="text-xl font-semibold mb-2 text-center">Open</h2>
+            <div class="task-container" *ngFor="let task of getTasks('open')" cdkDrag>
+                <app-todo-item [todo]="task"></app-todo-item>
+            </div>
+        </div>
+
+        <div cdkDropList [cdkDropListData]="getTasks('pending')" (cdkDropListDropped)="onDrop($event)"
+            class="w-full md:w-1/4 bg-rose-50 p-4 rounded-xl hover:bg-opacity-80">
+            <h2 class="text-xl text-center font-semibold mb-2">Pending</h2>
+            <div class="task-container" *ngFor="let task of getTasks('pending')" cdkDrag>
+                <app-todo-item [todo]="task"></app-todo-item>
+            </div>
+        </div>
+
+        <div cdkDropList [cdkDropListData]="getTasks('in-progress')" (cdkDropListDropped)="onDrop($event)"
+            class="w-full md:w-1/4 bg-rose-50 p-4 rounded-xl hover:bg-opacity-80">
+            <h2 class="text-xl font-semibold mb-2 text-center">In Progress</h2>
+            <div class="task-container" *ngFor="let task of getTasks('in-progress')" cdkDrag>
+                <app-todo-item [todo]="task"></app-todo-item>
+            </div>
+        </div>
+
+        <div cdkDropList [cdkDropListData]="getTasks('completed')" (cdkDropListDropped)="onDrop($event)"
+            class="w-full md:w-1/4 bg-rose-50 p-4 rounded-xl hover:bg-opacity-80">
+            <h2 class="text-xl font-semibold mb-2 text-center">Completed</h2>
+            <div class="task-container" *ngFor="let task of getTasks('completed')" cdkDrag>
+                <app-todo-item [todo]="task"></app-todo-item>
+            </div>
+        </div>
     </div>
 </div>

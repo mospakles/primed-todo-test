@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "primed-2d177": {
+      "hosting": {
+        "primed-todo-codetest": [
+          "primed-2d177"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "primed-2d177"
+  }
+}

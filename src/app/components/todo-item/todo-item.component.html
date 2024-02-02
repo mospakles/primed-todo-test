@@ -1,16 +1,41 @@
-<div class="flex p-4 justify-between items-center bg-slate-100 my-2 shadow-md hover:shadow-2xl">
-    <div class="flex items-center">
-        <div class="">{{todo!.id}}</div>
-        <div class="ml-2" [ngClass]="{'line-through':completeTodo}" *ngIf="!editTodo; else inputBlock;" (click)="completeToggle">{{todo!.title}}</div>
-        <ng-template #inputBlock>
-            <input type="text" class="input ml-2 p-2" [(ngModel)]="todoInput" placeholder="What do you wanna do?" />
-        </ng-template>
+<div class="flex flex-col p-4 bg-gray-50 my-2 shadow-md hover:shadow-2xl rounded-md">
+    <div class="flex items-center mb-2">
+        <div class="text-gray-600 font-medium">{{ todo?.dueDate }}</div>
     </div>
-    <div class="flex">
-        <button *ngIf="editTodo; else elseBlock;" class="btn green mr-2" (click)="updateToggle()">Edit</button>
-        <ng-template #elseBlock>
-            <button class="btn green mr-2" (click)="updateTodo()">Update</button>
-        </ng-template>
+<div class="flex flex-col">
+    <div class="ml-2 text-center" [ngClass]="{'line-through': completeTodo}" *ngIf="!editTodo; else inputBlock;">
+        <span class="text-xl font-semibold text-gray-700 p-2">{{ todo?.title }}</span>
+    </div>
+        <div class="mb-2 text-center">
+            <div class="text-gray-600 font-light">{{ todo?.description }}</div>
+        </div>
+    </div>
+
+    <ng-template #inputBlock>
+        <div class="flex flex-col mt-2 space-y-2">
+            <input type="text" class="input p-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+                [(ngModel)]="todoInput.title" placeholder="Title" />
+
+            <textarea class="input p-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+                [(ngModel)]="todoInput.description" placeholder="Description"></textarea>
+
+            <input type="date" id="dueDate"
+                class="input p-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+                [(ngModel)]="todoInput.dueDate" placeholder="Due Date" />
+
+            <select class="input p-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+                [(ngModel)]="todoInput.status">
+                <option value="completed">Completed</option>
+                <option value="pending">Pending</option>
+                <option value="in-progress">In Progress</option>
+                <option value="open">Open</option>
+            </select>
+        </div>
+    </ng-template>
+
+    <div class="flex flex-col mt-2 md:flex-row mx-auto p-2">
+        <button class="btn green mb-2 md:mb-0 md:mr-2" *ngIf="!editTodo" (click)="updateToggle()">Edit</button>
+        <button class="btn green mb-2 md:mb-0 md:mr-2" *ngIf="editTodo" (click)="updateTodo()">Update</button>
         <button class="btn red" (click)="deleteTodo()">Delete</button>
     </div>
 </div>
